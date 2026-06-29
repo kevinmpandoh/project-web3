@@ -1,7 +1,6 @@
-import type { NextConfig } from "next";
+﻿import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
   turbopack: {},
   transpilePackages: [
     "@solana/wallet-adapter-base",
@@ -25,3 +24,4 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+
