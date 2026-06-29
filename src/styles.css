@@ -1,0 +1,314 @@
+@import "tailwindcss";
+@source "./";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* brand tokens */
+  --color-sky: var(--sky);
+  --color-sky-deep: var(--sky-deep);
+  --color-ocean: var(--ocean);
+  --color-foam: var(--foam);
+  --color-sunset: var(--sunset);
+  --color-sunset-deep: var(--sunset-deep);
+  --color-ink: var(--ink);
+  --color-leaf: var(--leaf);
+  --color-gold: var(--gold);
+  --color-sand: var(--sand);
+  --color-cyan-soft: var(--cyan-soft);
+
+  --font-pixel: "Press Start 2P", "VT323", monospace;
+  --font-sans: "Nunito", "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-glow: 0 10px 40px -10px color-mix(in oklab, var(--ocean) 45%, transparent);
+  --shadow-soft: 0 4px 18px -8px rgba(27, 34, 64, 0.25);
+  --shadow-chunky: 0 4px 0 0 var(--ink);
+  --shadow-chunky-sm: 0 3px 0 0 var(--ink);
+}
+
+:root {
+  --radius: 1rem;
+
+  /* Ansem Land palette — warm earth, tilled soil + harvest gold */
+  --sky: #e9d3b0;
+  --sky-deep: #c89b6a;
+  --ocean: #6b3e1f;
+  --foam: #f6e7d1;
+  --sunset: #e8a24a;
+  --sunset-deep: #c4671c;
+  --ink: #2a1a10;
+  --leaf: #9c7b3f;
+  --gold: #f0c068;
+  --sand: #fbe9c8;
+  --cyan-soft: #efd8b4;
+
+  --background: #f4e3c6;
+  --foreground: var(--ink);
+  --card: #fff7e8;
+  --card-foreground: var(--ink);
+  --popover: #fff7e8;
+  --popover-foreground: var(--ink);
+  --primary: var(--sunset);
+  --primary-foreground: var(--ink);
+  --secondary: var(--foam);
+  --secondary-foreground: var(--ink);
+  --muted: #ead4b0;
+  --muted-foreground: #6b4a30;
+  --accent: var(--sky-deep);
+  --accent-foreground: var(--ink);
+  --destructive: #c0392b;
+  --destructive-foreground: #fff7e8;
+  --border: #c89b6a;
+  --input: #e6c79a;
+  --ring: var(--sunset-deep);
+
+  --gradient-sky: linear-gradient(180deg, #e9d3b0 0%, #f1dfba 60%, #fbe9c8 100%);
+  --gradient-ocean: linear-gradient(135deg, #6b3e1f, #c89b6a);
+  --gradient-sunset: linear-gradient(180deg, #f3c07a, #e8a24a 60%, #c4671c);
+  --gradient-hero: radial-gradient(
+    ellipse at 80% -5%,
+    #f7c878 0%,
+    #f0d7a0 25%,
+    #e3bf8a 60%,
+    #f4e3c6 100%
+  );
+}
+
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  body {
+    background: var(--gradient-sky);
+    background-attachment: fixed;
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+  }
+  h1,
+  h2,
+  h3,
+  .pixel {
+    font-family: var(--font-pixel);
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+  }
+  ::selection {
+    background: var(--sunset);
+    color: var(--ink);
+  }
+}
+
+/* ---- utilities ---- */
+
+@utility pixel {
+  font-family: var(--font-pixel);
+}
+
+@utility ink-border {
+  border: 2px solid var(--ink);
+}
+
+@utility card-pop {
+  background: #ffffff;
+  border: 2px solid var(--ink);
+  border-radius: 1.25rem;
+  box-shadow: var(--shadow-chunky);
+}
+
+@utility pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #ffffff;
+  border: 2px solid var(--ink);
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--ink);
+  box-shadow: var(--shadow-chunky-sm);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 0 0 var(--ink);
+  }
+  &:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 0 var(--ink);
+  }
+}
+
+@utility chunky-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--gradient-sunset);
+  color: var(--ink);
+  font-family: var(--font-pixel);
+  font-size: 0.95rem;
+  padding: 0.9rem 1.5rem;
+  border: 2px solid var(--ink);
+  border-radius: 1rem;
+  box-shadow: 0 5px 0 0 var(--ink);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 0 0 var(--ink);
+  }
+  &:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 0 var(--ink);
+  }
+}
+
+@utility chunky-btn-sky {
+  background: linear-gradient(180deg, #fff1cf, #f3d28a);
+}
+
+@utility cloud-float {
+  animation: leaf-sway 6s ease-in-out infinite;
+}
+
+@utility boat-bob {
+  animation: leaf-sway 5s ease-in-out infinite;
+}
+
+@utility marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 38s linear infinite;
+}
+
+@keyframes leaf-sway {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(3deg);
+  }
+}
+
+@keyframes sun-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes water-shimmer {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.water-tile {
+  animation: water-shimmer 3s ease-in-out infinite;
+}
+
+/* pixel-style wheat sprig (pure CSS) — replaces the old cloud decoration */
+.pixel-cloud {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: var(--gold);
+  border-radius: 2px;
+  box-shadow:
+    0 -14px 0 0 var(--gold),
+    14px -7px 0 0 var(--sunset),
+    -14px -7px 0 0 var(--sunset),
+    0 14px 0 0 var(--leaf),
+    14px 7px 0 0 var(--gold),
+    -14px 7px 0 0 var(--gold),
+    0 28px 0 0 var(--leaf);
+  opacity: 0.85;
+  filter: drop-shadow(0 2px 0 rgba(58, 36, 24, 0.15));
+}
+
+/* wallet adapter overrides — chunky sunset */
+.wallet-adapter-button {
+  background: var(--gradient-sunset) !important;
+  color: var(--ink) !important;
+  border: 2px solid var(--ink) !important;
+  border-radius: 0.75rem !important;
+  font-family: var(--font-pixel) !important;
+  font-size: 0.62rem !important;
+  line-height: 1 !important;
+  height: 38px !important;
+  padding: 0 0.65rem !important;
+  white-space: nowrap !important;
+  box-shadow: 0 3px 0 0 var(--ink) !important;
+}
+@media (min-width: 640px) {
+  .wallet-adapter-button {
+    font-size: 0.78rem !important;
+    height: 44px !important;
+    padding: 0 1rem !important;
+    border-radius: 0.85rem !important;
+    box-shadow: 0 4px 0 0 var(--ink) !important;
+  }
+}
+.wallet-adapter-button .wallet-adapter-button-start-icon {
+  margin-right: 6px !important;
+  width: 16px !important;
+  height: 16px !important;
+}
+.wallet-adapter-button:not([disabled]):hover {
+  background: var(--gradient-sunset) !important;
+  filter: brightness(1.04);
+  transform: translateY(-1px);
+}
+.wallet-adapter-modal-wrapper {
+  border-radius: 1rem !important;
+  max-width: calc(100vw - 1.5rem) !important;
+}

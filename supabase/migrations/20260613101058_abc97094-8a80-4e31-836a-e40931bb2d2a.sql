@@ -1,0 +1,1 @@
+ALTER TABLE public.world_presence ADD COLUMN IF NOT EXISTS tier text NOT NULL DEFAULT 'free';
