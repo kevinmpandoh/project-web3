@@ -137,7 +137,7 @@ function Gate({
               <>
                 <p className="text-xs text-muted-foreground">or</p>
                 <button onClick={onGuest} className="chunky-btn chunky-btn-sky text-ink">
-                  ðŸŽ® Enter as Guest
+                  Enter as Guest
                 </button>
                 <p className="max-w-xs text-[11px] text-ink/60">
                   Walk around the town without a wallet. Guests stay at level 1 and aren't ranked
