@@ -82,7 +82,7 @@ function WorldPage() {
         <Gate icon={Wallet} title="Connect wallet to enter town" connect onGuest={enterGuest} />
       )}
       {gate.connected && gate.status === "loading" && (
-        <Gate icon={Sparkles} title="Checking your wallet…" />
+        <Gate icon={Sparkles} title="Checking your walletâ€¦" />
       )}
       {gate.connected && gate.status === "insufficient" && (
         <Gate icon={Lock} title="At least 1 token needed" getToken />
@@ -96,7 +96,7 @@ function WorldPage() {
       {useGuest && (
         <>
           <div className="mx-auto mt-3 flex w-full max-w-3xl items-center justify-between gap-3 rounded-xl bg-sunset/20 px-4 py-2 text-xs text-ink ink-border">
-            <span>🎮 Guest mode — progress saved on this device only.</span>
+            <span>ðŸŽ® Guest mode â€” progress saved on this device only.</span>
             <button onClick={exitGuest} className="pill text-xs">
               Exit guest
             </button>
@@ -137,7 +137,7 @@ function Gate({
               <>
                 <p className="text-xs text-muted-foreground">or</p>
                 <button onClick={onGuest} className="chunky-btn chunky-btn-sky text-ink">
-                  🎮 Enter as Guest
+                  ðŸŽ® Enter as Guest
                 </button>
                 <p className="max-w-xs text-[11px] text-ink/60">
                   Walk around the town without a wallet. Guests stay at level 1 and aren't ranked
@@ -150,7 +150,7 @@ function Gate({
         {getToken && (
           <a href={PUMP_FUN_URL} target="_blank" rel="noreferrer">
             <Button size="lg" className="mt-6 chunky-btn">
-              🪙 Get Token
+              ðŸª™ Get Token
             </Button>
           </a>
         )}
@@ -210,7 +210,7 @@ const TILE_COLORS: Record<TileKind, [string, string]> = {
   water: ["#5fb6e8", "#54aade"],
 };
 
-// 10 shirt colors × 10 hat colors = 100 avatar combos, picked
+// 10 shirt colors Ã— 10 hat colors = 100 avatar combos, picked
 // deterministically from the wallet (or NPC name) so everyone always
 // sees the same outfit for the same player. Duplicates can happen with
 // many players, that's fine, it's a town.
@@ -252,6 +252,7 @@ function avatarFor(key: string): Avatar {
 }
 
 function World({ address, balance }: { address: string; balance: number }) {
+  const isGuest = address.startsWith("guest-");
   const tier = tierForBalance(balance);
   const game = useGame(address, tier);
   const { messages, send } = useChat();
@@ -471,7 +472,7 @@ function World({ address, balance }: { address: string; balance: number }) {
 
     if (plot) {
       if (plot.wallet !== address) {
-        toast.info("This plant belongs to another player 🌱");
+        toast.info("This plant belongs to another player ðŸŒ±");
         return;
       }
       if (Date.now() < plot.readyAt) {
@@ -503,7 +504,7 @@ function World({ address, balance }: { address: string; balance: number }) {
       return;
     }
     if ((g.state.seeds[crop.id] ?? 0) < 1) {
-      toast.error(`No ${crop.name} seeds, buy some at the Seed Shop 🌱`);
+      toast.error(`No ${crop.name} seeds, buy some at the Seed Shop ðŸŒ±`);
       return;
     }
     if (g.state.energy < 2) {
@@ -921,7 +922,7 @@ function World({ address, balance }: { address: string; balance: number }) {
       ctx.fillText(m.name, sx, sy - 42);
 
       if (opts.bubble) {
-        const text = opts.bubble.length > 28 ? `${opts.bubble.slice(0, 28)}…` : opts.bubble;
+        const text = opts.bubble.length > 28 ? `${opts.bubble.slice(0, 28)}â€¦` : opts.bubble;
         ctx.font = "11px Nunito, sans-serif";
         const w = ctx.measureText(text).width + 14;
         ctx.fillStyle = "rgba(255,255,255,0.95)";
@@ -947,12 +948,12 @@ function World({ address, balance }: { address: string; balance: number }) {
         ctx.font = "20px serif";
         ctx.fillText(crop.emoji, sx, sy + 4 - bounce);
         ctx.font = "10px serif";
-        ctx.fillText("✨", sx + 11, sy - 10 - bounce);
-        if (p.expiresAt - nowMs < 15 * 60 * 1000) ctx.fillText("⏳", sx - 12, sy - 10);
+        ctx.fillText("âœ¨", sx + 11, sy - 10 - bounce);
+        if (p.expiresAt - nowMs < 15 * 60 * 1000) ctx.fillText("â³", sx - 12, sy - 10);
       } else {
         const progress = (nowMs - p.plantedAt) / Math.max(1, p.readyAt - p.plantedAt);
         ctx.font = progress < 0.5 ? "10px serif" : "14px serif";
-        ctx.fillText("🌱", sx, sy + 3);
+        ctx.fillText("ðŸŒ±", sx, sy + 3);
       }
       // owner marker matches the owner's shirt color
       ctx.fillStyle = avatarFor(p.wallet).shirt;
@@ -993,7 +994,7 @@ function World({ address, balance }: { address: string; balance: number }) {
             drawPerson(
               {
                 ...me,
-                name: `⭐ ${nameRef.current}`,
+                name: `â­ ${nameRef.current}`,
                 level: levelRef.current,
                 tier: tierRef.current,
               },
@@ -1059,6 +1060,10 @@ function World({ address, balance }: { address: string; balance: number }) {
     e.preventDefault();
     const body = chatInput.trim();
     if (!body) return;
+    if (isGuest) {
+      toast.error("Connect a Solana wallet to use chat.");
+      return;
+    }
     setChatInput("");
     bubblesRef.current.set(address, { text: body, at: Date.now() });
     send.mutate(
@@ -1099,7 +1104,7 @@ function World({ address, balance }: { address: string; balance: number }) {
           <Users className="h-3.5 w-3.5 text-ocean" /> {onlineCount} online
         </div>
         <button onClick={() => setShopOpen("seed")} className="pill text-xs">
-          🌱 Seeds
+          ðŸŒ± Seeds
         </button>
         <button onClick={() => setShopOpen("market")} className="pill text-xs">
           <ShoppingBag className="h-3.5 w-3.5" /> Market
@@ -1131,13 +1136,13 @@ function World({ address, balance }: { address: string; balance: number }) {
                         : "border-ink/60 bg-foam text-ink hover:bg-cyan-soft"
                   }`}
                 >
-                  <span className="text-sm">{locked ? "🔒" : c.emoji}</span>
+                  <span className="text-sm">{locked ? "ðŸ”’" : c.emoji}</span>
                   {locked ? `L${c.unlockLevel}` : `${c.seedCost}g`}
                 </button>
               );
             })}
             <span className="ml-1 hidden text-[10px] text-ink/60 sm:inline">
-              click soil to plant · click your ✨ crop to harvest
+              click soil to plant Â· click your âœ¨ crop to harvest
             </span>
           </div>
         </div>
@@ -1147,7 +1152,7 @@ function World({ address, balance }: { address: string; balance: number }) {
       {(zone === "seed" || zone === "market") && shopOpen === null && (
         <div className="absolute bottom-24 left-1/2 -translate-x-1/2 sm:bottom-20">
           <Button onClick={() => setShopOpen(zone)} className="chunky-btn">
-            {zone === "seed" ? "🌱 Open Seed Shop" : "🛠️ Open Market"}
+            {zone === "seed" ? "ðŸŒ± Open Seed Shop" : "ðŸ› ï¸ Open Market"}
           </Button>
         </div>
       )}
@@ -1165,19 +1170,20 @@ function World({ address, balance }: { address: string; balance: number }) {
         <input
           value={chatInput}
           onChange={(e) => setChatInput(e.target.value)}
-          placeholder="Say something, it appears above your head…"
+          placeholder={isGuest ? "Connect wallet to chat" : "Say something, it appears above your head..."}
           maxLength={280}
+          disabled={isGuest}
           className="ink-border flex-1 rounded-xl bg-foam/95 px-3 py-2 text-sm outline-none focus:border-sunset-deep"
           aria-label="World chat message"
         />
-        <Button type="submit" size="sm" disabled={send.isPending} className="h-auto rounded-xl">
+        <Button type="submit" size="sm" disabled={isGuest || send.isPending} className="h-auto rounded-xl">
           Send
         </Button>
       </form>
 
       {/* Help hint */}
       <div className="pointer-events-none absolute bottom-16 left-3 hidden text-[11px] text-ink/60 sm:block">
-        WASD / arrows / click to move · plant on the fenced fields · 🛒 shop anytime
+        WASD / arrows / click to move Â· plant on the fenced fields Â· ðŸ›’ shop anytime
       </div>
     </main>
   );
@@ -1213,7 +1219,7 @@ function WorldShop({
       >
         <div className="flex items-center justify-between">
           <h3 className="pixel text-sm text-ink">
-            {kind === "seed" ? "🌱 Seed Shop" : "🛠️ Market"}
+            {kind === "seed" ? "ðŸŒ± Seed Shop" : "ðŸ› ï¸ Market"}
           </h3>
           <div className="flex items-center gap-2">
             {kind === "seed" && (
@@ -1221,7 +1227,7 @@ function WorldShop({
                 className="rounded-full bg-cyan-soft px-2 py-0.5 text-xs font-bold text-ink"
                 title="Your seed bag, plant seeds to free up space"
               >
-                🎒 {bagMax - seedBagSpace(state.seeds, bagMax)}/{bagMax}
+                ðŸŽ’ {bagMax - seedBagSpace(state.seeds, bagMax)}/{bagMax}
               </span>
             )}
             <span className="flex items-center gap-1 rounded-full bg-sunset/40 px-2 py-0.5 text-xs font-bold text-ink">
@@ -1242,8 +1248,8 @@ function WorldShop({
             <div className="mt-3 grid grid-cols-2 gap-1 rounded-xl bg-cyan-soft p-1 ink-border">
               {(
                 [
-                  ["buy", "🌱 Buy Seeds"],
-                  ["sell", "🧺 Sell Harvest"],
+                  ["buy", "ðŸŒ± Buy Seeds"],
+                  ["sell", "ðŸ§º Sell Harvest"],
                 ] as const
               ).map(([id, label]) => (
                 <button
@@ -1271,12 +1277,12 @@ function WorldShop({
                       }`}
                     >
                       <div className="flex min-w-0 items-center gap-2">
-                        <span className="text-lg">{locked ? "🔒" : c.emoji}</span>
+                        <span className="text-lg">{locked ? "ðŸ”’" : c.emoji}</span>
                         <div className="min-w-0">
                           <div className="truncate text-sm font-semibold text-ink">
                             {c.name}
                             {owned > 0 && (
-                              <span className="ml-1 text-[10px] text-ink/60">×{owned} owned</span>
+                              <span className="ml-1 text-[10px] text-ink/60">Ã—{owned} owned</span>
                             )}
                           </div>
                           <div className="text-[11px] text-muted-foreground">
@@ -1299,7 +1305,7 @@ function WorldShop({
                                 if (earned) toast.success(`+${earned}g`);
                               }}
                             >
-                              −1
+                              âˆ’1
                             </Button>
                           )}
                           {[1, 5].map((qty) => (
@@ -1319,7 +1325,7 @@ function WorldShop({
                                 const bought = buySeeds(c.id, qty);
                                 if (bought)
                                   toast.success(
-                                    `+${bought} ${c.name} seed${bought > 1 ? "s" : ""} (−${bought * c.seedCost}g)`,
+                                    `+${bought} ${c.name} seed${bought > 1 ? "s" : ""} (âˆ’${bought * c.seedCost}g)`,
                                   );
                               }}
                             >
@@ -1337,7 +1343,7 @@ function WorldShop({
             {tab === "sell" &&
               (barnEntries.length === 0 ? (
                 <p className="mt-4 text-center text-sm text-muted-foreground">
-                  Your barn is empty, plant something on the fields! 🌱
+                  Your barn is empty, plant something on the fields! ðŸŒ±
                 </p>
               ) : (
                 <>
@@ -1352,7 +1358,7 @@ function WorldShop({
                         >
                           <span className="flex items-center gap-2 text-sm font-semibold text-ink">
                             <span className="text-lg">{crop.emoji}</span>
-                            {crop.name} × {qty}
+                            {crop.name} Ã— {qty}
                           </span>
                           <Button
                             size="sm"
