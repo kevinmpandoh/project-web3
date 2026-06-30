@@ -1,0 +1,9 @@
+{$APP_DOMAIN} {
+  encode gzip zstd
+  reverse_proxy web:3000
+}
+
+{$WS_DOMAIN} {
+  encode gzip zstd
+  reverse_proxy realtime:2567
+}
