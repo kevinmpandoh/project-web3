@@ -105,6 +105,9 @@ export interface GameStore {
 }
 
 export function displayName(p: { username: string | null; wallet_address: string }) {
+  if (p.wallet_address.startsWith("guest-")) {
+    return "Guest-" + p.wallet_address.replace(/^guest-/, "").slice(0, 4).toUpperCase();
+  }
   return p.username?.trim() || `${p.wallet_address.slice(0, 4)}…${p.wallet_address.slice(-4)}`;
 }
 
@@ -178,6 +181,11 @@ class SupabaseStore implements GameStore {
   }
 
   async insertChat(wallet: string, body: string): Promise<ChatRow> {
+    if (wallet.startsWith("guest-")) {
+      await this.db
+        .from("users")
+        .upsert({ wallet_address: wallet, last_seen_at: new Date().toISOString() }, { onConflict: "wallet_address" });
+    }
     const { data, error } = await this.db
       .from("chat_messages")
       .insert({ wallet_address: wallet, body })

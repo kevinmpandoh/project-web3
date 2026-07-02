@@ -1060,10 +1060,6 @@ function World({ address, balance }: { address: string; balance: number }) {
     e.preventDefault();
     const body = chatInput.trim();
     if (!body) return;
-    if (isGuest) {
-      toast.error("Connect a Solana wallet to use chat.");
-      return;
-    }
     setChatInput("");
     bubblesRef.current.set(address, { text: body, at: Date.now() });
     send.mutate(
@@ -1170,13 +1166,12 @@ function World({ address, balance }: { address: string; balance: number }) {
         <input
           value={chatInput}
           onChange={(e) => setChatInput(e.target.value)}
-          placeholder={isGuest ? "Connect wallet to chat" : "Say something, it appears above your head..."}
+          placeholder="Say something, it appears above your head..."
           maxLength={280}
-          disabled={isGuest}
           className="ink-border flex-1 rounded-xl bg-foam/95 px-3 py-2 text-sm outline-none focus:border-sunset-deep"
           aria-label="World chat message"
         />
-        <Button type="submit" size="sm" disabled={isGuest || send.isPending} className="h-auto rounded-xl">
+        <Button type="submit" size="sm" disabled={send.isPending} className="h-auto rounded-xl">
           Send
         </Button>
       </form>

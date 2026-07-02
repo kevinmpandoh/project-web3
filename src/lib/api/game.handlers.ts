@@ -13,9 +13,15 @@ import {
 
 const wallet = z
   .string()
-  .min(32)
-  .max(44)
-  .regex(/^[1-9A-HJ-NP-Za-km-z]+$/, "not a base58 Solana address");
+  .refine(
+    (val) => {
+      if (val.startsWith("guest-")) {
+        return /^guest-[a-z0-9]+$/.test(val);
+      }
+      return val.length >= 32 && val.length <= 44 && /^[1-9A-HJ-NP-Za-km-z]+$/.test(val);
+    },
+    { message: "not a base58 Solana address or guest ID" }
+  );
 
 const rarity = z.enum(["Common", "Uncommon", "Rare", "Epic", "Legendary"]);
 

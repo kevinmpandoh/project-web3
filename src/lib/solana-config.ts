@@ -1,10 +1,13 @@
-export const TOKEN_MINT = "";
+export const TOKEN_MINT = process.env.NEXT_PUBLIC_TOKEN_MINT || "";
 export const MIN_TOKEN_BALANCE = 1;
-// Public mainnet RPC rate-limits; set VITE_RPC_ENDPOINT (Helius/QuickNode)
+// Public mainnet RPC rate-limits; set NEXT_PUBLIC_RPC_ENDPOINT (Helius/QuickNode)
 // in .env for production traffic.
 // api.mainnet-beta.solana.com blocks browser traffic (403). Use a public,
-// CORS-enabled endpoint by default; override with VITE_RPC_ENDPOINT for prod.
+// CORS-enabled endpoint by default; override with NEXT_PUBLIC_RPC_ENDPOINT for prod.
 export const RPC_ENDPOINT =
+  process.env.NEXT_PUBLIC_RPC_ENDPOINT ||
+  process.env.NEXT_PUBLIC_VITE_RPC_ENDPOINT ||
+  process.env.VITE_RPC_ENDPOINT ||
   "https://mainnet.helius-rpc.com/?api-key=7e952c6c-d516-4c0e-9798-1a913a359037";
 export const PUMP_FUN_URL = `https://pump.fun/coin/${TOKEN_MINT}`;
 

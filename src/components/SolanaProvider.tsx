@@ -67,6 +67,17 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
           }));
           (async () => {
             try {
+              if (!cfg.TOKEN_MINT) {
+                if (cancel) return;
+                setState({
+                  balance: 0,
+                  status: "granted",
+                  address: publicKey.toBase58(),
+                  connected: true,
+                  refresh,
+                });
+                return;
+              }
               const mint = new (PublicKey as unknown as new (v: string) => unknown)(cfg.TOKEN_MINT);
               const resp = await (
                 connection as unknown as {
