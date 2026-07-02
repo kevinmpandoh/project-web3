@@ -16,6 +16,9 @@ dist-ssr
 .nitro
 *.local
 .next
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
 
 # Wrangler / Cloudflare
 .wrangler/

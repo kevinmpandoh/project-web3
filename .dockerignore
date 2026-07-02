@@ -1,0 +1,28 @@
+node_modules
+.next
+.git
+.data
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# TypeScript incremental build cache — causes "not a directory" errors
+# when Railway's BuildKit cache conflicts with this file
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+# Local env and secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Editor
+.vscode
+.idea
+.DS_Store
+
+# Realtime server has its own deploy
+realtime-server
